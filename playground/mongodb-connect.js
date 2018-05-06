@@ -1,7 +1,22 @@
 
 
-const MongoClient = require('mongodb').MongoClient;
+//const MongoClient = require('mongodb').MongoClient;
+//this code (below) is identical to the code above
+const {MongoClient, ObjectID} = require('mongodb');
 
+/*
+var obj = new ObjectID();
+
+console.log(obj);
+*/
+
+//this is object de-structuring. it is a good way to extract the value from
+//an object and set it equal to a variable
+/*var user = {name: 'Casey', age: 28};
+
+var {name} = user;
+
+console.log(name);*/
 MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
 
     if(err) {
@@ -27,7 +42,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
     //insert new doc into Users collection. Give it a name property, age property
     //and a location string
 
-    db.collection('Users').insertOne({
+ /*   db.collection('Users').insertOne({
         name: 'Casey',
         age: 28,
         location: 'Salt Lake City'
@@ -35,9 +50,9 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
         if(err){
             return console.log('unable to insert user', err);
         }
-        console.log(JSON.stringify(result.ops));
+        console.log(JSON.stringify(result.ops[0]._id.getTimestamp()));
 
-    })
+    });*/
 
     client.close();
 
