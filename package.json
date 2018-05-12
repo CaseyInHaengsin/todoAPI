@@ -9,8 +9,10 @@
   "author": "Casey",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
     "mongodb": "^3.0.7",
     "mongoose": "^5.0.17",
-    "npm": "^6.0.0"
+    "npm": "^6.0.1"
   }
 }
