@@ -1,5 +1,21 @@
 const {SHA256} = require('crypto-js');
+const bcrypt = require('bcryptjs');
 
+var password = '123abc';
+
+//first variable is rounds of encryption. Second number is a callback
+bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+        console.log(hash);
+        //console.log(hash);
+    });
+});
+var hashedPassword = '$2a$10$bzUP7H80FTMw15KEF3iJyOZkGCbx4VDsKxcrFtfAMc3yd0vgM3Qei';
+
+bcrypt.compare(password, hashedPassword, (err, res) => {
+    console.log(res);
+});
+/*
 const jwt = require('jsonwebtoken');
 
 var data = {
@@ -14,6 +30,7 @@ console.log(token);
 var decoded = jwt.verify(token, '123abc');
 console.log(decoded);
 
+*/
 
 
 /*
