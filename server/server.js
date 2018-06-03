@@ -65,9 +65,9 @@ app.get(`/todos/:id`, authenticate, (req, res) => {
 });
 
 app.delete('/todos/:id', authenticate, (req, res) => {
-    var idD = req.params.id;
+    var id = req.params.id;
 
-    if(!ObjectID.isValid(idD)){
+    if(!ObjectID.isValid(id)){
         return res.status(404).send();
     }
     Todo.findOneAndRemove({
@@ -89,42 +89,32 @@ app.delete('/todos/:id', authenticate, (req, res) => {
     //if no doc, send 404
 });
 
+
 app.patch('/todos/:id', authenticate, (req, res) => {
-   var id = req.params.id;
-   var body = _.pick(req.body, ['text', 'completed']);
+    var id = req.params.id;
+    var body = _.pick(req.body, ['text', 'completed']);
 
-   if(!ObjectID.isValid(id)){
-       return res.status(404).send();
-   }
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
 
-   if(_.isBoolean(body.completed && body.completed)){
-       //set body.completedAt
-       body.completedAt = new Date().getTime();
-   }
-   else{
-       body.completed = false;
-       body.completedAt = null;
-   }
+    if (_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
 
-    //use findOneA
-   Todo.findOneAndUpdate({
-       _id: id,
-       _creator: req.user_id
-   }, {$set: body}, {new: true}).then((todo) => {
-        if(!todo){
+    Todo.findOneAndUpdate({_id: id, _creator: req.user._id}, {$set: body}, {new: true}).then((todo) => {
+        if (!todo) {
             return res.status(404).send();
         }
 
-
         res.send({todo});
-
-   }).catch((e) => {
-       res.status(400).send();
-   })
-
-
-});
-
+    }).catch((e) => {
+        res.status(400).send();
+    })
+})
 
 app.post('/users', (req, res) => {
      var body = _.pick(req.body, ['email', 'password']);
@@ -169,7 +159,9 @@ app.post('/users/login', (req, res) => {
 app.delete('/users/me/token', authenticate, (req, res) => {
     req.user.removeToken(req.token).then(() => {
         res.status(200).send();
-    })
+    }, () => {
+        res.status(400).send();
+    });
 });
 
 if(!module.parent){
